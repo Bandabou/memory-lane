@@ -33,30 +33,20 @@ const memories = [
 ];
 
 export default function MemoryLanePage() {
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const router = useRouter();
 
-  const selectedMemory = memories[selectedIndex];
+  const selectedMemory = selectedIndex !== null ? memories[selectedIndex] : null;
 
-  // Track if image viewer should be top:0 (true) or top:4rem (false)
   const [stickyTopZero, setStickyTopZero] = useState(false);
-
-  // Reference to the back button element
   const backButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function onScroll() {
       if (!backButtonRef.current) return;
 
-      // Get the bottom position of the back button relative to viewport
       const backBtnBottom = backButtonRef.current.getBoundingClientRect().bottom;
-
-      // If back button bottom is above viewport top, fix image to top: 0
-      if (backBtnBottom <= 0) {
-        setStickyTopZero(true);
-      } else {
-        setStickyTopZero(false);
-      }
+      setStickyTopZero(backBtnBottom <= 0);
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -92,48 +82,55 @@ export default function MemoryLanePage() {
               <p className="italic text-gray-700">{memory.text}</p>
             </div>
           ))}
+          {selectedIndex === null && (
+            <p className="mt-8 text-center italic text-gray-500">Select a memory to view the image</p>
+          )}
         </div>
 
         {/* Right: Sticky Image Viewer (desktop only) */}
         <div className="hidden md:block h-full">
-          <div className="sticky top-24">
-            <div className="bg-white/40 p-4 rounded-xl shadow-xl max-h-[600px] flex items-center justify-center">
-              <Image
-                src={selectedMemory.image}
-                alt={`Memory from ${selectedMemory.year}`}
-                sizes="(min-width: 768px) 600px, 100vw"
-                className="w-full h-auto max-h-[500px] object-contain"
-                width={0}
-                height={0}
-                priority
-              />
+          {selectedMemory && (
+            <div className="sticky top-24">
+              <div className="bg-white/40 p-4 rounded-xl shadow-xl max-h-[600px] flex items-center justify-center">
+                <Image
+                  src={selectedMemory.image}
+                  alt={`Memory from ${selectedMemory.year}`}
+                  sizes="(min-width: 768px) 600px, 100vw"
+                  className="w-full h-auto max-h-[500px] object-contain"
+                  width={0}
+                  height={0}
+                  priority
+                />
+              </div>
             </div>
+          )}
+        </div>
+      </div>
+
+      {/* Fixed Top Image Viewer (mobile only, only if selected) */}
+      {selectedMemory && (
+        <div
+          className={`fixed left-0 right-0 md:hidden bg-white/90 p-4 shadow-b-lg border-b border-gray-300 max-h-[50vh] overflow-hidden z-50 transition-[top] duration-300 ease-in-out`}
+          style={{ top: stickyTopZero ? '0' : '4rem' }}
+        >
+          <div className="flex items-center justify-center h-full">
+            <Image
+              src={selectedMemory.image}
+              alt={`Memory from ${selectedMemory.year}`}
+              sizes="100vw"
+              className="max-h-[40vh] w-auto object-contain rounded-lg"
+              width={0}
+              height={0}
+            />
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Mobile: Fixed Image Viewer that moves from below back button to top on scroll */}
-      <div
-        className={`fixed left-0 right-0 md:hidden bg-white/90 p-4 shadow-b-lg border-b border-gray-300 max-h-[50vh] overflow-hidden z-50 transition-[top] duration-300 ease-in-out`}
-        style={{ top: stickyTopZero ? '0' : '4rem' }}
-      >
-        <div className="flex items-center justify-center h-full">
-          <Image
-            src={selectedMemory.image}
-            alt={`Memory from ${selectedMemory.year}`}
-            sizes="100vw"
-            className="max-h-[40vh] w-auto object-contain rounded-lg"
-            width={0}
-            height={0}
-          />
-        </div>
-      </div>
-
-      {/* Update padding-top on main content for mobile so list is not hidden under image */}
+      {/* Padding so list isn't covered on mobile */}
       <style jsx>{`
         @media (max-width: 767px) {
           main {
-            padding-top: 150px; /* padding for the image viewer */
+            padding-top: 150px;
           }
         }
       `}</style>
