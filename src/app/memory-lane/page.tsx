@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 const memories = [
@@ -38,13 +38,39 @@ export default function MemoryLanePage() {
 
   const selectedMemory = memories[selectedIndex];
 
+  // Track if image viewer should be top:0 (true) or top:4rem (false)
+  const [stickyTopZero, setStickyTopZero] = useState(false);
+
+  // Reference to the back button element
+  const backButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function onScroll() {
+      if (!backButtonRef.current) return;
+
+      // Get the bottom position of the back button relative to viewport
+      const backBtnBottom = backButtonRef.current.getBoundingClientRect().bottom;
+
+      // If back button bottom is above viewport top, fix image to top: 0
+      if (backBtnBottom <= 0) {
+        setStickyTopZero(true);
+      } else {
+        setStickyTopZero(false);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <main className="bg-gradient-to-br from-pink-100 via-red-100 to-yellow-100 min-h-screen py-16 px-6 text-gray-800 relative">
-      
+
       {/* Back Button */}
       <button
+        ref={backButtonRef}
         onClick={() => router.back()}
-        className="absolute top-4 left-4 bg-white/70 hover:bg-white/80 text-gray-800 px-3 py-1 rounded-lg shadow-md transition cursor-pointer"
+        className="absolute top-4 left-4 bg-white/70 hover:bg-white/80 text-gray-800 px-3 py-1 rounded-lg shadow-md transition cursor-pointer z-20"
       >
         ← Back
       </button>
@@ -53,7 +79,7 @@ export default function MemoryLanePage() {
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
         {/* Left: Memory List */}
-        <div className="space-y-8 pb-[150px] md:pb-0">
+        <div className="space-y-8 pt-[150px] md:pt-0 md:pb-0">
           {memories.map((memory, index) => (
             <div
               key={index}
@@ -86,8 +112,11 @@ export default function MemoryLanePage() {
         </div>
       </div>
 
-      {/* Fixed Bottom Image Viewer (mobile only) */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-white/90 p-4 shadow-t-lg border-t border-gray-300 max-h-[50vh] overflow-hidden">
+      {/* Mobile: Fixed Image Viewer that moves from below back button to top on scroll */}
+      <div
+        className={`fixed left-0 right-0 md:hidden bg-white/90 p-4 shadow-b-lg border-b border-gray-300 max-h-[50vh] overflow-hidden z-50 transition-[top] duration-300 ease-in-out`}
+        style={{ top: stickyTopZero ? '0' : '4rem' }}
+      >
         <div className="flex items-center justify-center h-full">
           <Image
             src={selectedMemory.image}
@@ -100,11 +129,11 @@ export default function MemoryLanePage() {
         </div>
       </div>
 
-      {/* Update padding-bottom on main content */}
+      {/* Update padding-top on main content for mobile so list is not hidden under image */}
       <style jsx>{`
         @media (max-width: 767px) {
           main {
-            padding-bottom: 150px; /* bigger padding for bigger image area */
+            padding-top: 150px; /* padding for the image viewer */
           }
         }
       `}</style>
