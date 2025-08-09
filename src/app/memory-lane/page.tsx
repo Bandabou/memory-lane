@@ -10,26 +10,37 @@ const memories = [
   { year: '2000-2025', text: 'Ugh wtf.', image: '/images/papawtf.jpeg' },
   { year: '2000-2025', text: 'Hoeveel jobs heeft hij???', image: '/images/papa2.jpeg' },
   { year: '2000-2025', text: 'Spot the differences.', image: '/images/pugs.jpeg' },
+  { year: '2000-2025', text: 'Greetings from R Kelly.', image: '/images/guy_kaya.jpeg' },
   { year: '2000-2025', text: 'Michelangelos creation of Cora.', image: '/images/dogs.jpeg' },
   { year: '2000-2025', text: 'Underbite and overbite...', image: '/images/ugh.jpeg' },
   { year: '2000-2025', text: 'Fire the barber...', image: '/images/costa_rica.jpeg' },
-  { year: '2000-2025', text: 'The first graduation celebration.', image: '/images/max_grad.jpeg' },
+  { year: '2000-2025', text: 'KILL the barber.', image: '/images/max_grad.jpeg' },
   { year: '2000-2025', text: 'For fuck sake took you long enough.', image: '/images/driver.jpeg' },
-  { year: '2000-2025', text: 'Greetings from Soldjaboi.', image: '/images/guy_kaya.jpeg' },
   { year: '2000-2025', text: 'Greeting from our chef Rivaru Ramsayeru.', image: '/images/oliver.jpeg' },
   { year: '2000-2025', text: 'Ugh wtf part 2.', image: '/images/wtf2.jpeg' },
   { year: '2000-2025', text: 'Future virgins.', image: '/images/brosis.jpeg' },
   { year: '2000-2025', text: 'Love at first sight (riv had een koekje in haar mond).', image: '/images/daisy.jpeg' },
   { year: '2000-2025', text: 'Real recognize real.', image: '/images/don.jpeg' },
-  { year: '2000-2025', text: 'Mama of the california chei.', image: '/images/eddie.jpeg' },
-  { year: '2000-2025', text: 'Papas side of the family.', image: '/images/famafrica.jpeg' },
+  { year: '2000-2025', text: 'What is in that CUP???.', image: '/images/eddie.jpeg' },
+  { year: '2000-2025', text: "Papa's side of the family.", image: '/images/famafrica.jpeg' },
   { year: '2000-2025', text: 'The good old days.', image: '/images/goodold.jpeg' },
-  { year: '2000-2025', text: 'Existential crisis.', image: '/images/hats.jpeg' },
+  { year: '2000-2025', text: 'The day Max got traded in for 6 goats.', image: '/images/hats.jpeg' },
+  { year: '2000-2025', text: 'Future Helmin Wiels!', image: '/images/pickme.jpeg' },
+  { year: '2000-2025', text: 'Pride came early.', image: '/images/pride.jpeg' },
+  { year: '2000-2025', text: 'Alleen maar 0.0%.', image: '/images/ams.jpeg' },
+  { year: '2000-2025', text: 'Hoe vaak heeft ze al in haar broek gepoept...', image: '/images/poep.jpeg' },
+  { year: '2000-2025', text: 'Good thing Max got braces.', image: '/images/pool.jpeg' },
+  { year: '2000-2025', text: 'Assistant To the regional manager.', image: '/images/protec.jpeg' },
+  { year: '2000-2025', text: 'Shrek and Rumpelstiltskin.', image: '/images/shrek.jpeg' },
+  { year: '2000-2025', text: 'You have to teach them early.', image: '/images/drink.jpeg' },
+  { year: '2000-2025', text: 'Every Gaza commercial be like.', image: '/images/arm.jpeg' },
+  { year: '2000-2025', text: 'Oysters en Good company.', image: '/images/fam.jpeg' },
   { year: '2000-2025', text: 'The greatest deal of the century.', image: '/images/iconic.jpeg' },
   { year: '2000-2025', text: 'Is there anything left in there?', image: '/images/toof.jpeg' },
   { year: '2000-2025', text: 'Silence of the pugs.', image: '/images/xmas.jpeg' },
   { year: '2000-2025', text: 'Always the best dressed.', image: '/images/rivfail.jpeg' },
   { year: '2000-2025', text: 'And now, the end is near, and so I face the final curtain.', image: '/images/surprise.jpeg' },
+  { year: '2025-3000', text: 'Do not forget where it all started.', image: '/images/begin.jpeg' },
 ];
 
 export default function MemoryLanePage() {
@@ -56,7 +67,7 @@ export default function MemoryLanePage() {
   return (
     <main className="bg-gradient-to-br from-pink-100 via-red-100 to-yellow-100 min-h-screen py-16 px-6 text-gray-800 relative">
 
-      {/* Back Button */}
+      {/* Back Button */} 
       <button
         ref={backButtonRef}
         onClick={() => router.back()}
@@ -66,6 +77,9 @@ export default function MemoryLanePage() {
       </button>
 
       <h1 className="text-4xl font-bold text-center mb-12">Memory Lane</h1>
+      <p className="text-center text-gray-600 italic mb-12">
+        Please click on a text piece to see the image
+      </p>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
         {/* Left: Memory List */}
@@ -78,8 +92,8 @@ export default function MemoryLanePage() {
                 selectedIndex === index ? 'bg-white/60' : 'hover:bg-white/40'
               }`}
             >
-              <p className="text-xl font-medium">{memory.year}</p>
-              <p className="italic text-gray-700">{memory.text}</p>
+              <p className="text-xl font-medium">{memory.text}</p>
+              <p className="italic text-gray-700">{memory.year}</p>
             </div>
           ))}
           {selectedIndex === null && (
