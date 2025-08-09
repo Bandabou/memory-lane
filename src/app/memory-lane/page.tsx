@@ -33,7 +33,7 @@ const memories = [
   { year: '2000-2025', text: 'Assistant To the regional manager.', image: '/images/protec.jpeg' },
   { year: '2000-2025', text: 'Shrek and Rumpelstiltskin.', image: '/images/shrek.jpeg' },
   { year: '2000-2025', text: 'You have to teach them early.', image: '/images/drink.jpeg' },
-  { year: '2000-2025', text: 'Every Gaza commercial be like.', image: '/images/arm.jpeg' },
+  { year: '2000-2025', text: 'Every charity commercial be like.', image: '/images/arm.jpeg' },
   { year: '2000-2025', text: 'Oysters en Good company.', image: '/images/fam.jpeg' },
   { year: '2000-2025', text: 'The greatest deal of the century.', image: '/images/iconic.jpeg' },
   { year: '2000-2025', text: 'Is there anything left in there?', image: '/images/toof.jpeg' },
